@@ -1,0 +1,5 @@
+module libgpiod [system] {
+  header "libgpiod.h"
+  link "gpiod"
+  export *
+}

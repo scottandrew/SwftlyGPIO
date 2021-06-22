@@ -1,0 +1,14 @@
+{
+  "configurations": [
+  {
+    "type": "lldb",
+    "request": "launch",
+    "name": "Debug Demo",
+    "program": "${workspaceFolder}/.build/debug/SwiftlyGPIODemo",
+    "args": [],
+    "cwd": "${workspaceFolder}",
+    "terminal": "integrated",
+    "preLaunchTask": "Build Demo"
+  }
+  ]
+}

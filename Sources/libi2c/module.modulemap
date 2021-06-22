@@ -1,0 +1,5 @@
+module libi2c [system] {
+  header "libi2c.h"
+  link "i2c"
+  export *
+}
