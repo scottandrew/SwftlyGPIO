@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/home/scott/Projects/SwiftlyGPIO/.build/aarch64-unknown-linux-gnu/debug/SwiftlyGPIODemo.build/master.swiftdeps"
+  },
+  "/home/scott/Projects/SwiftlyGPIO/Sources/SwiftlyGPIODemo/main.swift": {
+    "dependencies": "/home/scott/Projects/SwiftlyGPIO/.build/aarch64-unknown-linux-gnu/debug/SwiftlyGPIODemo.build/main.d",
+    "object": "/home/scott/Projects/SwiftlyGPIO/.build/aarch64-unknown-linux-gnu/debug/SwiftlyGPIODemo.build/main.swift.o",
+    "swiftmodule": "/home/scott/Projects/SwiftlyGPIO/.build/aarch64-unknown-linux-gnu/debug/SwiftlyGPIODemo.build/main~partial.swiftmodule",
+    "swift-dependencies": "/home/scott/Projects/SwiftlyGPIO/.build/aarch64-unknown-linux-gnu/debug/SwiftlyGPIODemo.build/main.swiftdeps"
+  }
+}

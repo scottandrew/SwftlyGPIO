@@ -1,0 +1,7 @@
+version: "Swift version 5.4.1 (swift-5.4.1-RELEASE)"
+options: "2662f1d384a0af12e00a7e0b3a48795c"
+build_time: [1624319049, 651451136]
+inputs:
+  "/home/scott/Projects/SwiftlyGPIO/Sources/SwiftlyGPIO/GPIO/GPIOChip.swift": [1624138646, 255000000]
+  "/home/scott/Projects/SwiftlyGPIO/Sources/SwiftlyGPIO/GPIO/GPIOLine.swift": [1624138647, 834844564]
+  "/home/scott/Projects/SwiftlyGPIO/Sources/SwiftlyGPIO/I2C/I2CDevice.swift": [1624138969, 676180801]
