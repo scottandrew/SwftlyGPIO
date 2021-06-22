@@ -1,5 +1,0 @@
-version: "Swift version 5.4.1 (swift-5.4.1-RELEASE)"
-options: "867e4c01f9d5988bd511cc40c0b579d3"
-build_time: [1624319049, 687973555]
-inputs:
-  "/home/scott/Projects/SwiftlyGPIO/Sources/SwiftlyGPIODemo/main.swift": [1624318227, 437555774]
