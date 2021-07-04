@@ -7,7 +7,7 @@ do {
   try icm20948.startup(deviceNumber: 1, address: 0x69)
 
 } catch { 
-  print ("o crap")
+  print (error)
 }
 
 

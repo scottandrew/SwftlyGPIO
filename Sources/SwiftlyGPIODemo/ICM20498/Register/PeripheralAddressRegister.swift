@@ -1,12 +1,12 @@
-class SlaveAddressRegister: BitStruct { 
+class PeripheralAddressRegister: BitStruct { 
   enum Bits: Int { 
     case address = 0x6
     case transferMode = 0x7
   }
 
   enum TransferMode: UInt8 { 
-    case write
-    case read
+    case write = 0
+    case read = 1
   }
 
   let addressLength = 7
@@ -22,10 +22,16 @@ class SlaveAddressRegister: BitStruct {
 
     var transferMode: TransferMode { 
       get { 
-        return TransferMode(rawValue: get(bitNumber: Bits.transferMode.rawValue, length: 1))!
+        return isEnabled(bitNumber: 7) ? .read : .write;
       }
       set { 
-        set(bitNumber: Bits.transferMode.rawValue, data: newValue.rawValue, length: 1)
+        enable(bitNumber: 7, newValue == .read)
       }
+      // get { 
+      //   return TransferMode(rawValue: get(bitNumber: Bits.transferMode.rawValue, length: 1))!
+      // }
+      // set { 
+      //   set(bitNumber: Bits.transferMode.rawValue, data: newValue.rawValue, length: 1)
+      // }
     }
   }

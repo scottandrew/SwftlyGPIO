@@ -40,20 +40,30 @@ open class I2CDevice {
     return i2c_smbus_read_word_data(handle, UInt8(truncatingIfNeeded: command))
   }
 
-  public func writeWord(command: Int, data: UInt16) throws {
-    if i2c_smbus_write_word_data(handle, UInt8(truncatingIfNeeded: command), data) < 0 {
+  @discardableResult
+  public func writeWord(command: Int, data: UInt16) throws -> Int {
+    let result = i2c_smbus_write_word_data(handle, UInt8(truncatingIfNeeded: command), data)
+    
+    if result < 0 {
       throw (I2CDeviceError.error(number: errno))
     }
+
+    return Int(result)
   }
 
   public func readByteData(command: Int) -> UInt8 {
     return UInt8(truncatingIfNeeded: i2c_smbus_read_byte_data(handle, UInt8(truncatingIfNeeded: command)))
   }
 
-  public func writeByteData(command: Int, data: UInt8) throws {
-    if i2c_smbus_write_byte_data(handle, UInt8(truncatingIfNeeded: command), UInt8(truncatingIfNeeded: data)) < 0 {
+  @discardableResult
+  public func writeByteData(command: Int, data: UInt8) throws -> Int {
+    let result = i2c_smbus_write_byte_data(handle, UInt8(truncatingIfNeeded: command), data) 
+
+    if result < 0 {
       throw (I2CDeviceError.error(number: errno))
     }
+
+    return Int(result)
   }
 
   public func writeBits(command: Int, bitNumber: Int, data: UInt8, length: Int) throws {

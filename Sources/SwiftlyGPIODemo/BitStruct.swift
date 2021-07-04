@@ -1,9 +1,9 @@
 import Foundation
 
 class BitStruct {
-    private var value = UInt8(0)
+    private (set) var value = UInt8(0)
 
-    init(value: UInt8 = 0) { 
+    required init(value: UInt8 = 0) { 
       self.value = value
     }
 
