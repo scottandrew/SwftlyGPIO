@@ -1,37 +1,34 @@
-class PeripheralAddressRegister: BitStruct { 
-  enum Bits: Int { 
-    case address = 0x6
-    case transferMode = 0x7
-  }
-
-  enum TransferMode: UInt8 { 
+class PeripheralAddressRegister: BitStruct {
+  enum TransferMode: UInt8 {
     case write = 0
     case read = 1
   }
 
-  let addressLength = 7
+  init(address: UInt8, mode: TransferMode = .read) {
+    super.init()
+    self.address = address
+    self.mode = mode
+  }
 
-  var address: UInt8 { 
-    get { 
-      return get(bitNumber: Bits.address.rawValue, length: addressLength)
+  required init(value: UInt8 = 0) {
+    super.init(value: value)
+  }
+
+  var address: UInt8 {
+    get {
+      return get(bitNumber: 6, length: 7)
     }
-    set { 
-      set(bitNumber: Bits.address.rawValue, data: newValue, length: addressLength)
+    set {
+      set(bitNumber: 6, data: newValue, length: 7)
     }
   }
 
-    var transferMode: TransferMode { 
-      get { 
-        return isEnabled(bitNumber: 7) ? .read : .write;
-      }
-      set { 
-        enable(bitNumber: 7, newValue == .read)
-      }
-      // get { 
-      //   return TransferMode(rawValue: get(bitNumber: Bits.transferMode.rawValue, length: 1))!
-      // }
-      // set { 
-      //   set(bitNumber: Bits.transferMode.rawValue, data: newValue.rawValue, length: 1)
-      // }
+  var mode: TransferMode {
+    get {
+      return isEnabled(bitNumber: 7) ? .read : .write
+    }
+    set {
+      enable(bitNumber: 7, newValue == .read)
     }
   }
+}

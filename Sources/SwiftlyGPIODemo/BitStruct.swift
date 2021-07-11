@@ -34,4 +34,6 @@ class BitStruct {
     func isEnabled(bitNumber: Int) -> Bool { 
       return get(bitNumber: bitNumber, length: 1) == 1
     }
+
+    func reset() { value = 0}
 }

@@ -1,26 +1,45 @@
 import Foundation
 
-extension ICM20948Driver { 
+extension ICM20948Driver {
+  internal func pollForPeripheral4Completion() throws {
+    let maxTries = 1000
+    var count = 0
+    var status = i2cMasterStatus(value: 5)
 
-  internal func i2cControllerPeripherial4TransactionWrite(
+    while count < maxTries {
+      // we need to keep reading the status register to see when it
+      // tells us it is done.
+      status = try read(bank: 0, command: ICM20498Bank0Register.i2cMasterStatus)
+
+      if status.isPeripheral4Done {
+        break
+      }
+
+      print("\(status.value)")
+      count += 1
+    }
+
+    if count >= maxTries {
+      throw ICM20498Error.peripheral4TransactionFailed
+    }
+  }
+
+  func i2cControllerPeripherial4TransactionWrite(
     address: UInt8,
     register: UInt8,
     data: Data,
     sendRegisterAddress: Bool
   ) throws {
-    let addressData = PeripheralAddressRegister()
-
-    addressData.address = address
-    addressData.transferMode = .write
+    let addressData = PeripheralAddressRegister(address: address,
+                                                mode: .write)
 
     try write(bank: 3, command: ICM20498Bank3Register.i2cPeripheral4Address, data: addressData)
     try write(bank: 3, command: ICM20498Bank3Register.i2cPeripheral4Register, data: register)
 
-    let controlRegister = PeripheralControlRegister()
-    controlRegister.isEnabled = true
-    controlRegister.isInterruptEnabled = false
-    controlRegister.delay = 0
-    controlRegister.registerDis = !sendRegisterAddress
+    let controlRegister = Peripheral4ControlRegister(isEnabled: true,
+                                                    isInterruptEnabled: false,
+                                                    registerDis: !sendRegisterAddress,
+                                                    delay: 0)
 
     // Keep pusing data..
     for byte in data {
@@ -37,47 +56,28 @@ extension ICM20948Driver {
         data: controlRegister
       )
 
-      let maxTries = 1000
-      var count = 0
-
-      while count < maxTries {
-        // we need to keep reading the status register to see when it
-        // tells us it is done.
-         let status: i2cMasterStatus = try read(bank: 0, command: ICM20498Bank0Register.i2cMasterStatus)
-         
-        if status.isSlave4Done {
-          break
-        }
-
-        count += 1
-      }
-
-      if (count >= maxTries) {
-        throw ICM20498Error.peripheral4TransactionFailed
-      }
+      try pollForPeripheral4Completion()
     }
   }
 
-  internal func i2cControllerPeripherial4TransactionRead(
+  func i2cControllerPeripherial4TransactionRead(
     address: UInt8,
     register: UInt8,
     size: Int,
     sendRegisterAddress: Bool
   ) throws -> Data {
-    let addressData = PeripheralAddressRegister()
+    let addressData = PeripheralAddressRegister(address: address)
     var readData = Data(count: size)
-
-    addressData.address = address
-    addressData.transferMode = .read
 
     try write(bank: 3, command: ICM20498Bank3Register.i2cPeripheral4Address, data: addressData)
     try write(bank: 3, command: ICM20498Bank3Register.i2cPeripheral4Register, data: register)
 
-    let controlRegister = PeripheralControlRegister()
-    controlRegister.isEnabled = true
-    controlRegister.isInterruptEnabled = false
-    controlRegister.delay = 0
-    controlRegister.registerDis = !sendRegisterAddress
+    let controlRegister = Peripheral4ControlRegister(
+      isEnabled: true,
+      isInterruptEnabled: false,
+      registerDis: !sendRegisterAddress,
+      delay: 0
+    )
 
     // Keep pusing data..
     for index in 0 ..< size {
@@ -88,26 +88,7 @@ extension ICM20948Driver {
         data: controlRegister
       )
 
-      let maxTries = 1000
-      var count = 0
-
-      while count < maxTries {
-        // we need to keep reading the status register to see when it
-        // tells us it is done.
-        let status: i2cMasterStatus = try read(bank: 0, command: ICM20498Bank0Register.i2cMasterStatus)
-
-        print(status.value);
-
-        if status.isSlave4Done {
-          break
-        }
-
-        count += 1
-      }
-
-      if count >= maxTries {
-        throw ICM20498Error.peripheral4TransactionFailed
-      }
+      try pollForPeripheral4Completion()
 
       readData[index] = try read(
         bank: 3,

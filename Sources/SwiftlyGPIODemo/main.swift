@@ -5,7 +5,7 @@ let icm20948 = ICM20948()
 
 do { 
   try icm20948.startup(deviceNumber: 1, address: 0x69)
-
+  print ("startup done")
 } catch { 
   print (error)
 }

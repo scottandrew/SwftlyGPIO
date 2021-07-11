@@ -25,16 +25,16 @@ enum ICM20498Bank3Register: UInt8, RegisterProtocol {
   case i2cPeripheral4DataInput
   case registerBankSelect = 0x7F
 
-  static func PeripheralRegisters(deviceNumber: UInt8) throws -> SecondaryPeripheralRegisters {
-    guard (0...4).contains(deviceNumber) else { 
+  static func PeripheralRegisters(number: UInt8) throws -> SecondaryPeripheralRegisters {
+    guard (0...4).contains(number) else { 
       throw ICM20498Error.invalidPeripheralId 
     }
 
     return SecondaryPeripheralRegisters(
-      address: ICM20498Bank3Register(rawValue: ICM20498Bank3Register.i2cPeripheral0Address.rawValue + deviceNumber)!,
-      register: ICM20498Bank3Register(rawValue: ICM20498Bank3Register.i2cPeripheral0Register.rawValue + deviceNumber)!,
-      control: ICM20498Bank3Register(rawValue: ICM20498Bank3Register.i2cPeripheral0Control.rawValue + deviceNumber)!,
-      dataOut: ICM20498Bank3Register(rawValue: ICM20498Bank3Register.i2cPeripheral0DataOut.rawValue + deviceNumber)!
+      address: ICM20498Bank3Register(rawValue: ICM20498Bank3Register.i2cPeripheral0Address.rawValue + number)!,
+      register: ICM20498Bank3Register(rawValue: ICM20498Bank3Register.i2cPeripheral0Register.rawValue + number)!,
+      control: ICM20498Bank3Register(rawValue: ICM20498Bank3Register.i2cPeripheral0Control.rawValue + number)!,
+      dataOut: ICM20498Bank3Register(rawValue: ICM20498Bank3Register.i2cPeripheral0DataOut.rawValue + number)!
     )
   }
 }
