@@ -20,6 +20,8 @@ class ICM20948 {
     try mpu.enableMasterI2CMasterPassthrough(false)
 
     try startMagnometer()
+
+    try mpu.setSampleMode(accelerometerMode: .continuous, gyroscopeMode: .continuous)
   }
 
   private func startMagnometer() throws {

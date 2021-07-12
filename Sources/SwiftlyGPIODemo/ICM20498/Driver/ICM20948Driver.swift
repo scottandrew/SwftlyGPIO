@@ -103,6 +103,28 @@ class ICM20948Driver: I2CDevice {
     try write(bank: 0, command: ICM20498Bank0Register.userControl, data: control)
   }
 
+  func setSampleMode(
+    i2cMasterMode: SampleModeRegister.Mode? = nil, 
+    accelerometerMode: SampleModeRegister.Mode? = nil, 
+    gyroscopeMode: SampleModeRegister.Mode? = nil
+  ) throws { 
+    let sampleModes: SampleModeRegister = try read(bank: 0, command: ICM20498Bank0Register.lpConfig)
+
+    if let i2cMasterMode = i2cMasterMode  { 
+      sampleModes.i2cMasterMode = i2cMasterMode
+    }
+
+    if let accelerometerMode = accelerometerMode { 
+      sampleModes.accelerometerMode = accelerometerMode
+    }
+
+    if let gyroscopeMode = gyroscopeMode { 
+      sampleModes.gyroscopeMode = gyroscopeMode
+    }
+
+    try write(bank: 0, command: ICM20498Bank0Register.lpConfig, data: sampleModes)
+  }
+
   @discardableResult
   func write<U>(command: U, data: UInt8) throws -> Int where U: RegisterProtocol {
     return try writeByteData(command: Int(command.register), data: data)
