@@ -14,4 +14,7 @@ extension ICM20948Driver {
 
     try enableI2CMaster(enable)
   }
+
+  // some code to read all sensors at once.
+  readSensors
 }

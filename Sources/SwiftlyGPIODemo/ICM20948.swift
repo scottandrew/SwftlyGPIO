@@ -22,6 +22,18 @@ class ICM20948 {
     try startMagnometer()
 
     try mpu.setSampleMode(accelerometerMode: .continuous, gyroscopeMode: .continuous)
+    try mpu.setAccelerometerScale(scale: .scale2g)
+    try mpu.setGyroScopeScale(scale: .scale250dps)
+    
+    try mpu.setAccelerometerLowpassFilterConfig(.db473_nw499)
+    try mpu.setGyroscopeLowpassFilterConfig(.db3614_nw3765)
+
+    try mpu.enableAccelerometerLowPassFilter(false)
+    try mpu.enableGyroscopeLowPassFilter(false)
+  }
+
+  func isDataReady() throws -> Bool { 
+    return try mpu.isDataReady()
   }
 
   private func startMagnometer() throws {

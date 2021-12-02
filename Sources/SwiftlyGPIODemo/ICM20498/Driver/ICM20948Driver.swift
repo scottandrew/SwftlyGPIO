@@ -125,6 +125,72 @@ class ICM20948Driver: I2CDevice {
     try write(bank: 0, command: ICM20498Bank0Register.lpConfig, data: sampleModes)
   }
 
+  func setAccelerometerScale(scale: AccelerometerConfig.Scale) throws { 
+    let config: AccelerometerConfig = try read(bank: 2, command: ICM20498Bank2Register.accelerometerConfig)
+
+    config.scale = scale
+
+    try write(bank: 2, command: ICM20498Bank2Register.accelerometerConfig, data: config)
+  }
+
+  func setGyroScopeScale(scale: GyroscopeConfig1.Scale) throws { 
+    let config: GyroscopeConfig1 = try read(bank: 2, command: ICM20498Bank2Register.gyroscopeConfig1)
+
+    config.scale = scale
+
+    try write(bank: 2, command: ICM20498Bank2Register.gyroscopeConfig1, data: config)
+  }
+  
+  func setAccelerometerLowpassFilterConfig(_ configuration: AccelerometerConfig.LowPassConfig) throws { 
+    let config: AccelerometerConfig = try read(bank: 2, command: ICM20498Bank2Register.accelerometerConfig)
+
+    config.lowpassFilterConfig = configuration
+
+    try write(bank: 2, command: ICM20498Bank2Register.accelerometerConfig, data: config)
+  }
+
+  func setGyroscopeLowpassFilterConfig(_ configuration: GyroscopeConfig1.LowPassConfig) throws { 
+    let config: GyroscopeConfig1 = try read(bank: 2, command: ICM20498Bank2Register.gyroscopeConfig1)
+
+    config.lowPassFilterConfig = configuration
+
+    try write(bank: 2, command: ICM20498Bank2Register.gyroscopeConfig1, data: config)
+  }
+
+  func enableAccelerometerLowPassFilter(_ enable: Bool) throws { 
+    let config: AccelerometerConfig = try read(bank: 2, command: ICM20498Bank2Register.accelerometerConfig)
+
+    config.lowPassFilterEnabled = enable
+
+    try write(bank: 2, command: ICM20498Bank2Register.accelerometerConfig, data: config)
+  }
+
+  func enableGyroscopeLowPassFilter(_ enable: Bool) throws { 
+    let config: GyroscopeConfig1 = try read(bank: 2, command: ICM20498Bank2Register.gyroscopeConfig1)
+
+    config.lowPassFilterEnabled = enable
+
+    try write(bank: 2, command: ICM20498Bank2Register.gyroscopeConfig1, data: config)
+  }
+
+  func readAccellerometerConfig() throws -> AccelerometerConfig { 
+    let config: AccelerometerConfig = try read(bank: 2, command: ICM20498Bank2Register.accelerometerConfig)
+
+    return config
+  }
+
+  func readGyroscopeConfig1() throws -> GyroscopeConfig1 { 
+    let config: GyroscopeConfig1 = try read(bank: 2, command: ICM20498Bank2Register.gyroscopeConfig1)
+
+    return config
+  }
+ 
+  func isDataReady() throws -> Bool { 
+    let status: IntStatus1 = try read(bank: 1, command: ICM20498Bank0Register.intStastus1);
+
+    return status.isDataReady;
+  }
+
   @discardableResult
   func write<U>(command: U, data: UInt8) throws -> Int where U: RegisterProtocol {
     return try writeByteData(command: Int(command.register), data: data)
@@ -148,6 +214,7 @@ class ICM20948Driver: I2CDevice {
 
     return T(value: data)
   }
+  
 
   func read<U>(bank: UInt8, command: U) throws -> UInt8 where U: RegisterProtocol {
     try setBank(bank)

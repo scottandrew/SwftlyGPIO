@@ -1,5 +1,6 @@
 import Glibc
 import libi2c
+import Foundation
 
 enum I2CDeviceError: Error {
   case error(number: Int32)
@@ -92,5 +93,24 @@ open class I2CDevice {
     byte >>= (bitNumber - length + 1)
 
     return byte
+  }
+
+  public func bulkRead(startinCommand: Int, length: Int) throws -> Data { 
+      var buffer = Data(count: length)
+
+
+      try buffer.withUnsafeMutableBytes{ ptr in 
+        guard let bytes = ptr.baseAddress?.assumingMemoryBound(to: UInt8.self) else { 
+          throw GPIOError.error(number: -1)
+        }
+
+        let result = i2c_smbus_read_i2c_block_data(handle, UInt8(startinCommand), UInt8(length), bytes)
+
+        if result < 1 { 
+          throw (I2CDeviceError.error(number: errno))
+        }
+      }
+
+      return buffer
   }
 }
